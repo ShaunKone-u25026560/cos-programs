@@ -1,0 +1,17 @@
+CFLAGS = -Wall -Werror -g
+CC = g++ -std=c++98
+TARGET = main
+FILES = QueryResponse.cpp BooleanElement.cpp CharacterElement.cpp Column.cpp IntegerElement.cpp RealElement.cpp \
+	TextElement.cpp BooleanColumn.cpp CharacterColumn.cpp Query.cpp IntegerColumn.cpp RealValueColumn.cpp \
+	TextColumn.cpp Database.cpp InsertQuery.cpp RemoveQuery.cpp SearchQuery.cpp UpdateQuery.cpp main.cpp
+HFILES = QueryResponse.h BooleanElement.h CharacterElement.h Column.h IntegerElement.h RealElement.h \
+	TextElement.h BooleanColumn.h CharacterColumn.h Query.h IntegerColumn.h RealValueColumn.h \
+	TextColumn.h Database.h InsertQuery.h RemoveQuery.h SearchQuery.h UpdateQuery.h Element.h
+
+compile:
+	$(CC) $(CFLAGS) *.cpp -o $(TARGET)
+	./main
+zipFile:
+	zip u25026560.zip $(FILES) $(HFILES) TemplateFunctions.cpp TemplateFunctions.h students.csv
+reset:
+	rm -f u25026560.zip

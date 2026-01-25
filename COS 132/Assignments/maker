@@ -1,0 +1,42 @@
+CC = g++ -std=c++98
+CFLAGS = -Wall -Werror -g
+LFLAGS = -static
+TARGET = main
+OBJECTS = IO.o Memory.o Instructions.o OS.o
+
+test:
+	g++ --coverage -c IO.cpp
+	g++ --coverage -c Instructions.cpp
+	g++ --coverage -c Memory.cpp
+	g++ --coverage -c OS.cpp
+	g++ --coverage -c main.cpp
+
+	g++ --coverage *.o -o main
+	./main
+	gcov -f -m -r IO.cpp Instructions.cpp Memory.cpp OS.cpp main.cpp
+
+# Creates main file for compilation
+all: $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET)
+
+# List of all compilations for .o files
+IO.o: IO.h
+Memory.o: Memory.h IO.h
+Instructions.o:Instructions.h Memory.h IO.h
+OS.o: OS.h Instructions.h Memory.h IO.h
+
+%.o: %.cpp
+	$(CC) $< $(CFLAGS) -c -o $@ 
+
+# Checks for memory leaks using Valgrind
+memoryCheck:
+	valgrind --leak-check=full --keep-stacktraces=alloc-and-free ./main
+
+# Zips files into a folder
+zipFiles:
+	zip u25026560.zip Instructions.cpp IO.cpp Memory.cpp \
+	OS.cpp main.cpp programTask.txt programTaskLow.txt \
+	programTest.txt programTestLow.txt programEmpty.txt programEmptyLow.txt
+
+reset:
+	rm -f $(OBJECTS) *.zip $(TARGET) *.gcda *.gcno *.gcov
